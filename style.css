@@ -1,11 +1,124 @@
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: gold;
-    padding: 50px
-
+:root {
+  --bg: #0f172a;
+  --panel: #111827;
+  --accent: #38bdf8;
+  --accent2: #60a5fa;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --btn: #1f2937;
+  --btn-hover: #334155;
+  --danger: #fb7185;
+  --success: #34d399;
 }
-button {
-    padding: 10px 20px;
-    font-size: 16px;
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, system-ui, sans-serif;
+  background: radial-gradient(
+    circle at top,
+    #1e293b 0%,
+    #0f172a 55%,
+    #020617 100%
+  );
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+.calculator {
+  width: min(440px, 100%);
+  background: rgba(15, 23, 42, 0.94);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 32px;
+  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.45);
+  overflow: hidden;
+}
+.display {
+  padding: 28px 24px 20px;
+  display: grid;
+  gap: 10px;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.96),
+    rgba(15, 23, 42, 0.8)
+  );
+}
+.history {
+  font-size: 0.95rem;
+  color: var(--muted);
+  min-height: 24px;
+  word-break: break-all;
+  max-height: 56px;
+  overflow: auto;
+}
+.output {
+  font-size: 2.8rem;
+  font-weight: 700;
+  text-align: right;
+  letter-spacing: 0.01em;
+  word-break: break-all;
+  min-height: 64px;
+}
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 24px;
+}
+.button {
+  border: none;
+  border-radius: 18px;
+  padding: 18px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--btn);
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.2);
+}
+.button:hover {
+  transform: translateY(-1px);
+  background: var(--btn-hover);
+}
+.button:active {
+  transform: translateY(0);
+}
+.button.operator {
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  color: #fff;
+  box-shadow: 0 12px 32px rgba(56, 189, 248, 0.28);
+}
+.button.function {
+  background: var(--btn-hover);
+  color: var(--text);
+}
+.button.zero {
+  grid-column: span 2;
+}
+.button.equal {
+  grid-column: span 2;
+  background: var(--success);
+  color: #0f172a;
+  box-shadow: 0 12px 32px rgba(52, 211, 153, 0.28);
+}
+.button.clear {
+  background: var(--danger);
+  color: #111827;
+  box-shadow: 0 12px 32px rgba(251, 113, 133, 0.28);
+}
+@media (max-width: 420px) {
+  .display {
+    padding: 22px 18px 16px;
+  }
+  .button {
+    padding: 16px 0;
+    font-size: 1rem;
+  }
 }

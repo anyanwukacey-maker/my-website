@@ -3,16 +3,372 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Second Website</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Word Puzzle Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 8px;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-item label {
+            display: block;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .score-item span {
+            display: block;
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .puzzle-section {
+            margin-bottom: 30px;
+        }
+
+        .clue {
+            background: #e8f0fe;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        .clue-label {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .clue-text {
+            font-size: 16px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .input-section {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-skip {
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+
+        .btn-skip:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-reset {
+            background: #ff6b6b;
+            color: white;
+            flex: 0.5;
+        }
+
+        .btn-reset:hover {
+            background: #ff5252;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        .progress {
+            margin-top: 20px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 8px;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        .game-over {
+            text-align: center;
+            padding: 30px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .game-over.show {
+            display: block;
+        }
+
+        .game-over h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .game-over p {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h1>🎮 Word Puzzle Game</h1>
+        
+        <div class="score-board">
+            <div class="score-item">
+                <label>Correct</label>
+                <span id="correct">0</span>
+            </div>
+            <div class="score-item">
+                <label>Incorrect</label>
+                <span id="incorrect">0</span>
+            </div>
+            <div class="score-item">
+                <label>Progress</label>
+                <span id="progress">0/10</span>
+            </div>
+        </div>
 
-    <h1>Welcome to somebody's Website</h1>
-    <p>this is my first website built with VS Code.</p>
+        <div id="gameContainer">
+            <div class="puzzle-section">
+                <div class="clue">
+                    <div class="clue-label">Clue</div>
+                    <div class="clue-text" id="clue">Ready to play? Click submit!</div>
+                </div>
 
-    <button onclick="showMessage()">Click Me</button>
+                <div class="input-section">
+                    <label for="answer">Your Answer:</label>
+                    <input type="text" id="answer" placeholder="Enter the word..." autocomplete="off">
+                </div>
 
-    <script src="script.js"></script>
+                <div class="button-group">
+                    <button class="btn-submit" onclick="submitAnswer()">Submit</button>
+                    <button class="btn-skip" onclick="skipQuestion()">Skip</button>
+                    <button class="btn-reset" onclick="resetGame()">Reset</button>
+                </div>
+
+                <div class="message" id="message"></div>
+
+                <div class="progress">
+                    <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-over" id="gameOver">
+            <h2>🎉 Game Complete!</h2>
+            <p>Final Score: <strong id="finalScore">0/10</strong></p>
+            <p>Correct Answers: <strong id="finalCorrect">0</strong></p>
+            <button class="btn-submit" onclick="resetGame()" style="width: 200px; margin: 0 auto; display: block;">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        const puzzles = [
+            { clue: "A large body of water", answer: "ocean" },
+            { clue: "The planet we live on", answer: "earth" },
+            { clue: "A bright star in our solar system", answer: "sun" },
+            { clue: "The natural satellite of Earth", answer: "moon" },
+            { clue: "A colorful arc after rain", answer: "rainbow" },
+            { clue: "Flying mammal active at night", answer: "bat" },
+            { clue: "Large land animal with a trunk", answer: "elephant" },
+            { clue: "Frozen water", answer: "ice" },
+            { clue: "Container for flowers", answer: "vase" },
+            { clue: "Small furry pet that meows", answer: "cat" }
+        ];
+
+        let currentIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+
+        function loadPuzzle() {
+            if (currentIndex < puzzles.length) {
+                const puzzle = puzzles[currentIndex];
+                document.getElementById('clue').textContent = puzzle.clue;
+                document.getElementById('answer').value = '';
+                document.getElementById('message').className = 'message';
+                document.getElementById('message').textContent = '';
+                document.getElementById('answer').focus();
+            } else {
+                endGame();
+            }
+        }
+
+        function submitAnswer() {
+            const userAnswer = document.getElementById('answer').value.trim().toLowerCase();
+            const correctAnswer = puzzles[currentIndex].answer.toLowerCase();
+            const messageEl = document.getElementById('message');
+
+            if (!userAnswer) {
+                messageEl.className = 'message error';
+                messageEl.textContent = '⚠️ Please enter an answer!';
+                return;
+            }
+
+            if (userAnswer === correctAnswer) {
+                correctCount++;
+                messageEl.className = 'message success';
+                messageEl.textContent = '✓ Correct!';
+            } else {
+                incorrectCount++;
+                messageEl.className = 'message error';
+                messageEl.textContent = `✗ Wrong! The answer was: ${correctAnswer}`;
+            }
+
+            updateScore();
+            setTimeout(nextPuzzle, 1500);
+        }
+
+        function skipQuestion() {
+            incorrectCount++;
+            const messageEl = document.getElementById('message');
+            messageEl.className = 'message error';
+            messageEl.textContent = `⊘ Skipped! The answer was: ${puzzles[currentIndex].answer}`;
+            updateScore();
+            setTimeout(nextPuzzle, 1500);
+        }
+
+        function nextPuzzle() {
+            currentIndex++;
+            loadPuzzle();
+        }
+
+        function updateScore() {
+            document.getElementById('correct').textContent = correctCount;
+            document.getElementById('incorrect').textContent = incorrectCount;
+            document.getElementById('progress').textContent = `${currentIndex + 1}/10`;
+            const progressPercent = ((currentIndex + 1) / puzzles.length) * 100;
+            document.getElementById('progressBar').style.width = progressPercent + '%';
+        }
+
+        function endGame() {
+            document.getElementById('gameContainer').style.display = 'none';
+            document.getElementById('gameOver').classList.add('show');
+            document.getElementById('finalScore').textContent = `${correctCount}/${puzzles.length}`;
+            document.getElementById('finalCorrect').textContent = correctCount;
+        }
+
+        function resetGame() {
+            currentIndex = 0;
+            correctCount = 0;
+            incorrectCount = 0;
+            document.getElementById('gameContainer').style.display = 'block';
+            document.getElementById('gameOver').classList.remove('show');
+            updateScore();
+            loadPuzzle();
+        }
+
+        // Start the game
+        resetGame();
+    </script>
 </body>
 </html>
